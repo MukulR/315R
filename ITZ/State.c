@@ -37,7 +37,7 @@ const short ZONE_5 = 5;
 
 int autonomousOption = -1;
 
-//Wait for Press--------------------------------------------------
+//Wait for Press----------------------------------------------
 void waitForPress()
 {
 	while(true){
