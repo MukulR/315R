@@ -29,15 +29,19 @@
 //Main competition background code...do not modify!
 #include "Vex_Competition_Includes.c"
 
-const short rightButton = 4;
-const short centerButton = 2;
+const short RIGHT_BUTTON_LCD = 4;
+const short CENTER_BUTTON_LCD = 2;
+const short ZONE_20 = 20;
+const short ZONE_10 = 10;
+const short ZONE_5 = 5;
+
 int autonomousOption = -1;
 
-//Wait for Press--------------------------------------------------
+//Wait for Press----------------------------------------------
 void waitForPress()
 {
 	while(true){
-		if(nLCDButtons == rightButton || nLCDButtons == centerButton) {
+		if(nLCDButtons == RIGHT_BUTTON_LCD || nLCDButtons == CENTER_BUTTON_LCD) {
 			break;
 		}
 	}
@@ -86,62 +90,118 @@ void pre_auton(){
 	bool optionSelected = false;
 	while(!optionSelected){
 		switch(currentOption){
-		case 0:
-			displayLCDCenteredString(0, "Left Auton");
-			displayLCDCenteredString(1, "Enter ==>");
-			waitForPress();
-			if(nLCDButtons == centerButton){
-				waitForRelease();
-				optionSelected = true;
-				autonomousOption = 0;
-				clearAndDisplayLCD("Left Auton");
-				} else if(nLCDButtons == rightButton){
-				waitForRelease();
-				currentOption++;
-			}
+			case 0:
+				displayLCDCenteredString(0, "20 Left");
+				displayLCDCenteredString(1, "Enter ==>");
+				waitForPress();
+				if(nLCDButtons == CENTER_BUTTON_LCD){
+					waitForRelease();
+					optionSelected = true;
+					autonomousOption = 0;
+					clearAndDisplayLCD("20 Left");
+				} else if(nLCDButtons == RIGHT_BUTTON_LCD){
+					waitForRelease();
+					currentOption++;
+				}
 			break;
-		case 1:
-			displayLCDCenteredString(0, "Right Auton");
-			displayLCDCenteredString(1, "Enter ==>");
-			waitForPress();
-			if(nLCDButtons == centerButton){
-				waitForRelease();
-				optionSelected = true;
-				autonomousOption = 1;
-				clearAndDisplayLCD("Right Auton");
-				} else if(nLCDButtons == rightButton){
-				waitForRelease();
-				currentOption++;
-			}
-			break;
-		case 2:
-			displayLCDCenteredString(0, "Static Auton");
-			displayLCDCenteredString(1, "Enter ==>");
-			waitForPress();
-			if(nLCDButtons == centerButton){
-				waitForRelease();
-				optionSelected = true;
-				autonomousOption = 2;
-				clearAndDisplayLCD("Static Auton");
-				} else if(nLCDButtons == rightButton){
-				waitForRelease();
-				currentOption++;
-			}
-			break;
-		case 3:
-			displayLCDCenteredString(0, "Disable Auton");
-			displayLCDCenteredString(1, "Enter ==>");
-			waitForPress();
-			if(nLCDButtons == centerButton){
-				waitForRelease();
-				optionSelected = true;
-				autonomousOption = 3;
-				clearAndDisplayLCD("Auton Disabled");
-				} else if(nLCDButtons == rightButton){
-				waitForRelease();
-				currentOption = 0;
-			}
-			break;
+			case 1:
+				displayLCDCenteredString(0, "20 Right");
+				displayLCDCenteredString(1, "Enter ==>");
+				waitForPress();
+				if(nLCDButtons == CENTER_BUTTON_LCD){
+					waitForRelease();
+					optionSelected = true;
+					autonomousOption = 1;
+					clearAndDisplayLCD("20 Right");
+				} else if(nLCDButtons == RIGHT_BUTTON_LCD){
+					waitForRelease();
+					currentOption++;
+				}
+				break;
+			case 2:
+				displayLCDCenteredString(0, "10 Left");
+				displayLCDCenteredString(1, "Enter ==>");
+				waitForPress();
+				if(nLCDButtons == CENTER_BUTTON_LCD){
+					waitForRelease();
+					optionSelected = true;
+					autonomousOption = 2;
+					clearAndDisplayLCD("10 Left");
+				} else if(nLCDButtons == RIGHT_BUTTON_LCD){
+					waitForRelease();
+					currentOption++;
+				}
+				break;
+			case 3:
+				displayLCDCenteredString(0, "10 Right");
+				displayLCDCenteredString(1, "Enter ==>");
+				waitForPress();
+				if(nLCDButtons == CENTER_BUTTON_LCD){
+					waitForRelease();
+					optionSelected = true;
+					autonomousOption = 3;
+					clearAndDisplayLCD("10 Right");
+				} else if(nLCDButtons == RIGHT_BUTTON_LCD){
+					waitForRelease();
+					currentOption++;
+				}
+				break;
+			case 4:
+				displayLCDCenteredString(0, "5 Left");
+				displayLCDCenteredString(1, "Enter ==>");
+				waitForPress();
+				if(nLCDButtons == CENTER_BUTTON_LCD){
+					waitForRelease();
+					optionSelected = true;
+					autonomousOption = 4;
+					clearAndDisplayLCD("5 Left");
+				} else if(nLCDButtons == RIGHT_BUTTON_LCD){
+					waitForRelease();
+					currentOption++;
+				}
+				break;
+			case 5:
+				displayLCDCenteredString(0, "5 Right");
+				displayLCDCenteredString(1, "Enter ==>");
+				waitForPress();
+				if(nLCDButtons == CENTER_BUTTON_LCD){
+					waitForRelease();
+					optionSelected = true;
+					autonomousOption = 5;
+					clearAndDisplayLCD("5 Right");
+				} else if(nLCDButtons == RIGHT_BUTTON_LCD){
+					waitForRelease();
+					currentOption++;
+				}
+				break;
+			case 6:
+				displayLCDCenteredString(0, "Static Auton");
+				displayLCDCenteredString(1, "Enter ==>");
+				waitForPress();
+				if(nLCDButtons == CENTER_BUTTON_LCD){
+					waitForRelease();
+					optionSelected = true;
+					autonomousOption = 6;
+					clearAndDisplayLCD("Static Auton");
+				} else if(nLCDButtons == RIGHT_BUTTON_LCD){
+					waitForRelease();
+					currentOption++;
+				}
+				break;
+			case 7:
+				displayLCDCenteredString(0, "Disable Auton");
+				displayLCDCenteredString(1, "Enter ==>");
+				waitForPress();
+				if(nLCDButtons == CENTER_BUTTON_LCD){
+					waitForRelease();
+					optionSelected = true;
+					autonomousOption = 7;
+					clearAndDisplayLCD("Auton Disabled");
+				} else if(nLCDButtons == RIGHT_BUTTON_LCD){
+					waitForRelease();
+					currentOption = 0;
+				}
+				break;
 		}
 	}
 	//} else {
@@ -184,7 +244,7 @@ void boxBackward(int power){
 void openClaw(int power){
 	motor[armClaw] = -1 * power;
 	wait1Msec(400);
-	motor[armClaw] = 0;
+	motor[armClaw] = -10;
 }
 
 void closeClaw(int power){
@@ -255,86 +315,7 @@ void mogoUpAuton(){
 	motor[mogo] = 0;
 }
 
-/*
-void Left_OR_Right_Auton(bool left){
-	// Close the claw so that cone doesn't fall off.
-	closeClaw(40);
-	// Lift arm
-	// Bring the mogo down
-	// Move forward to the mobile goal
-	armUp(50);
-	wait1Msec(250);
-	motor[mogo] = -127;
-	// mogoDown waits, no need to add additional wait here
-	moveForwardAuton(127, 1675);
-	motor[mogo] = 0;
-	// Pickup mobile goal
-	// Drop the yellow cone on mobile goal
-	mogoUpAuton();
-	// mogoUp waits, no need to add additional wait here
-	armDown(80);
-	wait1Msec(750);
-	stopAllMotorsAuton();
-	// Place the yellow cone on the mobile goal
-	openClaw(40);
-	stopAllMotorsAuton();
-	//
-	// Come back straight
-	moveBackwardAuton(127, 1200);
-
-	if (left) {
-		turnRightAuton(80);
-		} else {
-		turnLeftAuton(80);
-	}
-
-	wait1Msec(650);
-	stopAllMotorsAuton();
-	armDown(80);
-	wait1Msec(100);
-
-	// Align the back against the fence
-	moveBackwardAuton(80, 600);
-	// Move forward so that there is enough clearence from the fence
-	// to turn.
-	moveForwardAuton(80, 225);
-	if (left) {
-		turnRightAuton(80);
-		} else {
-		turnLeftAuton(80);
-	}
-	wait1Msec(450);
-	stopAllMotorsAuton();
-
-	moveForwardAuton(127, 950);
-
-	// Now turn either right or left so that the robot
-	// faces the drop zone.
-	if (left) {
-		turnRightAuton(80);
-		} else {
-		turnLeftAuton(80);
-	}
-	wait1Msec(650);
-	stopAllMotorsAuton();
-	// Lift the arm up
-	// Move forward so that robot's front is well within 10 point zone
-	// Drop the mobile goal in 20 point zone
-	// Drive back a bit
-	armUp(80);
-	wait1Msec(400);
-	stopAllMotorsAuton();
-	moveForwardAuton(127, 1250);
-	mogoDownAuton();
-	moveBackwardAuton(127, 150);
-	mogoUpAuton();
-	armDown(80);
-	wait1Msec(50);
-	stopAllMotorsAuton();
-	moveBackwardAuton(127, 250);
-} */
-
-void Left_OR_Right_Auton(bool left){
+/*void Left_OR_Right_Auton(bool left, int zone){
 	// Close the claw so that cone doesn't fall off.
 	closeClaw(40);
 	// Lift arm
@@ -387,46 +368,58 @@ void Left_OR_Right_Auton(bool left){
 	stopAllMotorsAuton();
 
 	//
-	// Come back straight
-	moveBackwardAuton(127, 1450);
+	// Come back straight a certain distance depending on the zone drop choice.
+	if(zone == ZONE_20 || zone == ZONE_10){
+		moveBackwardAuton(127, 1450);
+	} else {
+		// ZONE_5 drop.
+		moveBackwardAuton(127, 1100);
+	}
 
 	if (left) {
 		turnRightAuton(80);
-		} else {
+	} else {
 		turnLeftAuton(80);
 	}
-
-	wait1Msec(875);
-	stopAllMotorsAuton();
-
-	moveForwardAuton(127, 500);
-
-	// Now turn either right or left so that the robot
-	// faces the drop zone.
-	if (left) {
-		turnRightAuton(80);
-		} else {
-		turnLeftAuton(80);
+	if(zone == ZONE_20){
+		wait1Msec(875);
+	} else{
+		wait1Msec(1200);
 	}
-	wait1Msec(700);
 	stopAllMotorsAuton();
-	// Lift the arm up
-	// Move forward so that robot's front is well within 10 point zone
-	// Drop the mobile goal in 20 point zone
-	// Drive back a bit
-	armUp(80);
-	wait1Msec(100);
-	stopAllMotorsAuton();
-	moveForwardAuton(127, 1250);
-	mogoDownAuton();
-	moveBackwardAuton(127, 150);
-	mogoUpAuton();
-	armDown(127);
-	wait1Msec(300);
-	stopAllMotorsAuton();
-	moveBackwardAuton(127, 250);
-
+	if(zone == ZONE_20){
+		moveForwardAuton(127, 450);
+	} else if(zone == ZONE_10){
+		moveForwardAuton(127, 100);
+	}
+	if(zone == ZONE_20){
+		// Now turn either right or left so that the robot
+		// faces the drop zone.
+		if (left) {
+			turnRightAuton(80);
+		} else {
+			turnLeftAuton(80);
+		}
+		wait1Msec(700);
+		stopAllMotorsAuton();
+		// Lift the arm up
+		// Move forward so that robot's front is well within 10 point zone
+		// Drop the mobile goal in 20 point zone
+		// Drive back a bit
+		armUp(80);
+		wait1Msec(100);
+		stopAllMotorsAuton();
+		moveForwardAuton(127, 1250);
+		mogoDownAuton();
+		moveBackwardAuton(127, 150);
+		mogoUpAuton();
+		armDown(127);
+		wait1Msec(300);
+		stopAllMotorsAuton();
+		moveBackwardAuton(127, 250);
+	}
 }
+*/
 
 void staticGoalAuton(){
 	//arm up
@@ -448,25 +441,140 @@ void staticGoalAuton(){
 	stopAllMotorsAuton();
 }
 
+void Left_OR_Right_Auton(bool left, short zone){
+	// Close the claw so that cone doesn't fall off.
+	closeClaw(40);
+	// Lift arm
+	// Bring the mogo down
+	// Move forward to the mobile goal
+	armUp(50);
+	wait1Msec(250);
+	motor[mogo] = -127;
+	// mogoDown waits, no need to add additional wait here
+	moveForwardAuton(127, 1675);
+	motor[mogo] = 0;
+	// Pickup mobile goal
+	// Drop the yellow cone on mobile goal
+	mogoUpAuton();
+	// mogoUp waits, no need to add additional wait here
+	armDown(100);
+	wait1Msec(750);
+	stopAllMotorsAuton();
+	// Place the yellow cone on the mobile goal
+	openClaw(40);
+	stopAllMotorsAuton();
+
+	// Pick up and stack another cone
+	if (!left) {
+		// Adjust the robot for right jerk
+		turnLeftAuton(80);
+		wait1Msec(50);
+	}
+	moveForwardAuton(80, 350);
+	motor[armClaw] = -127;
+	boxForward(127);
+	wait1Msec(400);
+	stopMotor(armBox);
+	//openClaw(127);
+	armDown(127);
+	wait1Msec(300);
+	stopAllMotorsAuton();
+	closeClaw(127);
+	armUp(80);
+	wait1Msec(400);
+	stopMotor(leftArm);
+	stopMotor(rightArm);
+	boxBackward(127);
+	wait1Msec(600);
+	stopMotor(armBox);
+	armDown(100);
+	wait1Msec(650);
+	stopAllMotorsAuton();
+	// Place the yellow cone on the mobile goal
+	openClaw(40);
+	stopAllMotorsAuton();
+
+	//
+	// Come back straight
+	moveBackwardAuton(127, 1250);
+
+	if (left) {
+		turnLeftAuton(80);
+		} else {
+		turnRightAuton(80);
+	}
+	wait1Msec(300);
+
+	//coming back after turning towards fence to align with 20 point zone
+	stopAllMotorsAuton();
+	if(left){
+		moveBackwardAuton(127, 750);
+	} else {
+	 	moveBackwardAuton(127, 750);
+	}
+
+
+	// Now turn either right or left so that the robot
+	// faces the drop zone.
+	if (left) {
+		turnLeftAuton(80);
+		} else {
+		turnRightAuton(80);
+	}
+	wait1Msec(600);
+	stopAllMotorsAuton();
+	// Lift the arm up
+	// Move forward so that robot's front is well within 10 point zone
+	// Drop the mobile goal in 20 point zone
+	// Drive back a bit
+	armUp(80);
+	wait1Msec(100);
+	stopAllMotorsAuton();
+	moveForwardAuton(127, 1250);
+	mogoDownAuton();
+	moveBackwardAuton(127, 150);
+	mogoUpAuton();
+	armDown(127);
+	wait1Msec(300);
+	stopAllMotorsAuton();
+	moveBackwardAuton(127, 250);
+}
+
 
 task autonomous(){
 	switch(autonomousOption) {
-	case 0:
-		clearAndDisplayLCD("Left Auton");
-		Left_OR_Right_Auton(true /* Left is True */);
-		break;
-	case 1:
-		clearAndDisplayLCD("Right Auton");
-		Left_OR_Right_Auton(false /* Left is not True */);
-		break;
-	case 2:
-		clearAndDisplayLCD("Static Auton");
-		staticGoalAuton();
-		break;
-	case 3:
-		clearAndDisplayLCD("Disabled");
-		// Disable auton, do nothing.
-		break;
+		case 0:
+			clearAndDisplayLCD("20 Left");
+			Left_OR_Right_Auton(true /* Left is True */, ZONE_20);
+			break;
+		case 1:
+			clearAndDisplayLCD("20 Right");
+			Left_OR_Right_Auton(false /* Left is not True */, ZONE_20);
+			break;
+		case 2:
+			clearAndDisplayLCD("10 Left");
+			Left_OR_Right_Auton(true /* Left is True */, ZONE_10);
+			break;
+		case 3:
+			clearAndDisplayLCD("10 Right");
+			Left_OR_Right_Auton(false /* Left is not True */, ZONE_10);
+			break;
+		case 4:
+			clearAndDisplayLCD("5 Left");
+			Left_OR_Right_Auton(true /* Left is True */, ZONE_5);
+			break;
+		case 5:
+			clearAndDisplayLCD("5 Right");
+			Left_OR_Right_Auton(false /* Left is not True */, ZONE_5);
+			break;
+		case 6:
+			clearAndDisplayLCD("Static Auton");
+			staticGoalAuton();
+			break;
+		case 7:
+			clearAndDisplayLCD("Disabled");
+			// Disable auton, do nothing.
+			break;
 	}
 }
 
@@ -502,8 +610,7 @@ int togglePartner = 1;
 int filter(int input){
 	if (input > 20 || input < -20){
 		return input;
-	}
-	else {
+	} else {
 		return 0;
 	}
 }
@@ -511,13 +618,11 @@ int filter(int input){
 task toggleTask(){
 	while(true){
 		if(vexRT[Btn7U] == 1){
-
 			if(togglePartner == 1){
 				togglePartner = 0;
-				} else {
+			} else {
 				togglePartner = 1;
 			}
-
 			wait1Msec(700);
 		}
 	}

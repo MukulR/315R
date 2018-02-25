@@ -244,7 +244,7 @@ void boxBackward(int power){
 void openClaw(int power){
 	motor[armClaw] = -1 * power;
 	wait1Msec(400);
-	motor[armClaw] = 0;
+	motor[armClaw] = -10;
 }
 
 void closeClaw(int power){
@@ -471,10 +471,11 @@ void Left_OR_Right_Auton(bool left, short zone){
 		wait1Msec(50);
 	}
 	moveForwardAuton(80, 350);
+	motor[armClaw] = -127;
 	boxForward(127);
 	wait1Msec(400);
-	stopAllMotorsAuton();
-	openClaw(127);
+	stopMotor(armBox);
+	//openClaw(127);
 	armDown(127);
 	wait1Msec(300);
 	stopAllMotorsAuton();
@@ -495,27 +496,29 @@ void Left_OR_Right_Auton(bool left, short zone){
 
 	//
 	// Come back straight
-	moveBackwardAuton(127, 1450);
+	moveBackwardAuton(127, 1350);
 
 	if (left) {
-		turnRightAuton(80);
-		} else {
 		turnLeftAuton(80);
+		} else {
+		turnRightAuton(80);
 	}
+	wait1Msec(375);
 
-	wait1Msec(875);
+	//coming back after turning towards fence to align with 20 point zone
 	stopAllMotorsAuton();
 
-	moveForwardAuton(127, 550);
+	moveBackwardAuton(127, 800);
+
 
 	// Now turn either right or left so that the robot
 	// faces the drop zone.
 	if (left) {
-		turnRightAuton(80);
-		} else {
 		turnLeftAuton(80);
+		} else {
+		turnRightAuton(80);
 	}
-	wait1Msec(700);
+	wait1Msec(600);
 	stopAllMotorsAuton();
 	// Lift the arm up
 	// Move forward so that robot's front is well within 10 point zone
@@ -532,7 +535,6 @@ void Left_OR_Right_Auton(bool left, short zone){
 	wait1Msec(300);
 	stopAllMotorsAuton();
 	moveBackwardAuton(127, 250);
-
 }
 
 
