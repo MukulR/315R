@@ -315,112 +315,6 @@ void mogoUpAuton(){
 	motor[mogo] = 0;
 }
 
-/*void Left_OR_Right_Auton(bool left, int zone){
-	// Close the claw so that cone doesn't fall off.
-	closeClaw(40);
-	// Lift arm
-	// Bring the mogo down
-	// Move forward to the mobile goal
-	armUp(50);
-	wait1Msec(250);
-	motor[mogo] = -127;
-	// mogoDown waits, no need to add additional wait here
-	moveForwardAuton(127, 1675);
-	motor[mogo] = 0;
-	// Pickup mobile goal
-	// Drop the yellow cone on mobile goal
-	mogoUpAuton();
-	// mogoUp waits, no need to add additional wait here
-	armDown(100);
-	wait1Msec(750);
-	stopAllMotorsAuton();
-	// Place the yellow cone on the mobile goal
-	openClaw(40);
-	stopAllMotorsAuton();
-
-	// Pick up and stack another cone
-	if (!left) {
-		// Adjust the robot for right jerk
-		turnLeftAuton(80);
-		wait1Msec(50);
-	}
-	moveForwardAuton(80, 350);
-	boxForward(127);
-	wait1Msec(400);
-	stopAllMotorsAuton();
-	openClaw(127);
-	armDown(127);
-	wait1Msec(300);
-	stopAllMotorsAuton();
-	closeClaw(127);
-	armUp(80);
-	wait1Msec(400);
-	stopMotor(leftArm);
-	stopMotor(rightArm);
-	boxBackward(127);
-	wait1Msec(600);
-	stopMotor(armBox);
-	armDown(100);
-	wait1Msec(650);
-	stopAllMotorsAuton();
-	// Place the yellow cone on the mobile goal
-	openClaw(40);
-	stopAllMotorsAuton();
-
-	//
-	// Come back straight a certain distance depending on the zone drop choice.
-	if(zone == ZONE_20 || zone == ZONE_10){
-		moveBackwardAuton(127, 1450);
-	} else {
-		// ZONE_5 drop.
-		moveBackwardAuton(127, 1100);
-	}
-
-	if (left) {
-		turnRightAuton(80);
-	} else {
-		turnLeftAuton(80);
-	}
-	if(zone == ZONE_20){
-		wait1Msec(875);
-	} else{
-		wait1Msec(1200);
-	}
-	stopAllMotorsAuton();
-	if(zone == ZONE_20){
-		moveForwardAuton(127, 450);
-	} else if(zone == ZONE_10){
-		moveForwardAuton(127, 100);
-	}
-	if(zone == ZONE_20){
-		// Now turn either right or left so that the robot
-		// faces the drop zone.
-		if (left) {
-			turnRightAuton(80);
-		} else {
-			turnLeftAuton(80);
-		}
-		wait1Msec(700);
-		stopAllMotorsAuton();
-		// Lift the arm up
-		// Move forward so that robot's front is well within 10 point zone
-		// Drop the mobile goal in 20 point zone
-		// Drive back a bit
-		armUp(80);
-		wait1Msec(100);
-		stopAllMotorsAuton();
-		moveForwardAuton(127, 1250);
-		mogoDownAuton();
-		moveBackwardAuton(127, 150);
-		mogoUpAuton();
-		armDown(127);
-		wait1Msec(300);
-		stopAllMotorsAuton();
-		moveBackwardAuton(127, 250);
-	}
-}
-*/
-
 void staticGoalAuton(){
 	//arm up
 	armUp(50);
@@ -441,7 +335,7 @@ void staticGoalAuton(){
 	stopAllMotorsAuton();
 }
 
-void Left_OR_Right_Auton(bool left, short zone){
+void comeBackWithMogoAndTwoCones(bool left) {
 	// Close the claw so that cone doesn't fall off.
 	closeClaw(40);
 	// Lift arm
@@ -496,29 +390,27 @@ void Left_OR_Right_Auton(bool left, short zone){
 
 	//
 	// Come back straight
-	moveBackwardAuton(127, 1250);
+	moveBackwardAuton(127, 1350);
+}
 
+void dropInTwentyZone(bool left) {
 	if (left) {
 		turnLeftAuton(80);
-		} else {
+	} else {
 		turnRightAuton(80);
 	}
-	wait1Msec(300);
+	wait1Msec(375);
 
 	//coming back after turning towards fence to align with 20 point zone
 	stopAllMotorsAuton();
-	if(left){
-		moveBackwardAuton(127, 750);
-	} else {
-	 	moveBackwardAuton(127, 750);
-	}
 
+	moveBackwardAuton(127, 800);
 
 	// Now turn either right or left so that the robot
 	// faces the drop zone.
 	if (left) {
 		turnLeftAuton(80);
-		} else {
+	} else {
 		turnRightAuton(80);
 	}
 	wait1Msec(600);
@@ -538,6 +430,71 @@ void Left_OR_Right_Auton(bool left, short zone){
 	wait1Msec(300);
 	stopAllMotorsAuton();
 	moveBackwardAuton(127, 250);
+}
+
+void dropInTenZone(bool left) {
+	if (left) {
+		turnRightAuton(127);
+	} else {
+		turnLeftAuton(127);
+	}
+	if(left){
+		wait1Msec(1400);
+	} else {
+		wait1Msec(1400);
+	}
+	stopAllMotorsAuton();
+
+	armUp(80);
+	wait1Msec(100);
+	stopAllMotorsAuton();
+	if(left){
+		moveForwardAuton(127, 500);
+	} else {
+		moveForwardAuton(127, 950);
+	}
+	mogoDownAuton();
+	moveBackwardAuton(127, 200);
+	mogoUpAuton();
+	armDown(127);
+	wait1Msec(300);
+	stopAllMotorsAuton();
+	moveBackwardAuton(127, 400);
+}
+
+void dropInFiveZone(bool left) {
+	if (left) {
+		turnRightAuton(80);
+	} else {
+		turnLeftAuton(80);
+	}
+	wait1Msec(1800);
+	stopAllMotorsAuton();
+	moveBackwardAuton(127, 100);
+	armUp(80);
+	wait1Msec(100);
+	stopAllMotorsAuton();
+	mogoDownAuton();
+	moveBackwardAuton(127, 150);
+	mogoUpAuton();
+	armDown(127);
+	wait1Msec(300);
+	stopAllMotorsAuton();
+	moveBackwardAuton(127, 200);
+}
+
+void Left_OR_Right_Auton(bool left, short zone){
+	comeBackWithMogoAndTwoCones(left);
+	switch(zone) {
+		case ZONE_20:
+			dropInTwentyZone(left);
+			break;
+		case ZONE_10:
+			dropInTenZone(left);
+			break;
+		case ZONE_5:
+			dropInFiveZone(left);
+	};
 }
 
 
