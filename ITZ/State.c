@@ -13,7 +13,7 @@
 /*---------------------------------------------------------------------------*/
 /*                                                                           */
 /*               Desc: VEX 42627G Team Digital Minds Copyright               */
-/*                    						Credit:																		 */
+/*                    						  Credit:																	 */
 /*                    Head Developers: Mukul Rao, Jeffrey Tu				         */
 /*                                    									                     */
 /*                    				                                               */
@@ -364,12 +364,11 @@ void comeBackWithMogoAndTwoCones(bool left) {
 		turnLeftAuton(80);
 		wait1Msec(50);
 	}
-	moveForwardAuton(80, 350);
+	moveForwardAuton(80, 300);
 	motor[armClaw] = -127;
 	boxForward(127);
 	wait1Msec(400);
 	stopMotor(armBox);
-	//openClaw(127);
 	armDown(127);
 	wait1Msec(300);
 	stopAllMotorsAuton();
@@ -382,7 +381,7 @@ void comeBackWithMogoAndTwoCones(bool left) {
 	wait1Msec(600);
 	stopMotor(armBox);
 	armDown(100);
-	wait1Msec(650);
+	wait1Msec(450);
 	stopAllMotorsAuton();
 	// Place the yellow cone on the mobile goal
 	openClaw(40);
@@ -434,14 +433,14 @@ void dropInTwentyZone(bool left) {
 
 void dropInTenZone(bool left) {
 	if (left) {
-		turnRightAuton(127);
+		turnRightAuton(100);
 	} else {
-		turnLeftAuton(127);
+		turnLeftAuton(100);
 	}
 	if(left){
 		wait1Msec(1400);
 	} else {
-		wait1Msec(1400);
+		wait1Msec(1150);
 	}
 	stopAllMotorsAuton();
 
@@ -451,7 +450,7 @@ void dropInTenZone(bool left) {
 	if(left){
 		moveForwardAuton(127, 500);
 	} else {
-		moveForwardAuton(127, 950);
+		moveForwardAuton(127, 700);
 	}
 	mogoDownAuton();
 	moveBackwardAuton(127, 200);
@@ -468,9 +467,9 @@ void dropInFiveZone(bool left) {
 	} else {
 		turnLeftAuton(80);
 	}
-	wait1Msec(1800);
+	wait1Msec(1400);
 	stopAllMotorsAuton();
-	moveBackwardAuton(127, 100);
+	moveForwardAuton(80, 200);
 	armUp(80);
 	wait1Msec(100);
 	stopAllMotorsAuton();
