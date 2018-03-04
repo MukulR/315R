@@ -86,10 +86,10 @@ void pre_auton(){
 	// Go into auton selection only if button 7R is held during boot.
 	// This allows us to proceed to driver mode if Robot were to
 	// get disconnected during a match.
-	//if(vexRT[Btn7R] == 1){
-	bool optionSelected = false;
-	while(!optionSelected){
-		switch(currentOption){
+	if(vexRT[Btn7R] == 1){
+		bool optionSelected = false;
+		while(!optionSelected){
+			switch(currentOption){
 			case 0:
 				displayLCDCenteredString(0, "20 Left");
 				displayLCDCenteredString(1, "Enter ==>");
@@ -99,11 +99,11 @@ void pre_auton(){
 					optionSelected = true;
 					autonomousOption = 0;
 					clearAndDisplayLCD("20 Left");
-				} else if(nLCDButtons == RIGHT_BUTTON_LCD){
+					} else if(nLCDButtons == RIGHT_BUTTON_LCD){
 					waitForRelease();
 					currentOption++;
 				}
-			break;
+				break;
 			case 1:
 				displayLCDCenteredString(0, "20 Right");
 				displayLCDCenteredString(1, "Enter ==>");
@@ -113,7 +113,7 @@ void pre_auton(){
 					optionSelected = true;
 					autonomousOption = 1;
 					clearAndDisplayLCD("20 Right");
-				} else if(nLCDButtons == RIGHT_BUTTON_LCD){
+					} else if(nLCDButtons == RIGHT_BUTTON_LCD){
 					waitForRelease();
 					currentOption++;
 				}
@@ -127,7 +127,7 @@ void pre_auton(){
 					optionSelected = true;
 					autonomousOption = 2;
 					clearAndDisplayLCD("10 Left");
-				} else if(nLCDButtons == RIGHT_BUTTON_LCD){
+					} else if(nLCDButtons == RIGHT_BUTTON_LCD){
 					waitForRelease();
 					currentOption++;
 				}
@@ -141,7 +141,7 @@ void pre_auton(){
 					optionSelected = true;
 					autonomousOption = 3;
 					clearAndDisplayLCD("10 Right");
-				} else if(nLCDButtons == RIGHT_BUTTON_LCD){
+					} else if(nLCDButtons == RIGHT_BUTTON_LCD){
 					waitForRelease();
 					currentOption++;
 				}
@@ -155,7 +155,7 @@ void pre_auton(){
 					optionSelected = true;
 					autonomousOption = 4;
 					clearAndDisplayLCD("5 Left");
-				} else if(nLCDButtons == RIGHT_BUTTON_LCD){
+					} else if(nLCDButtons == RIGHT_BUTTON_LCD){
 					waitForRelease();
 					currentOption++;
 				}
@@ -169,7 +169,7 @@ void pre_auton(){
 					optionSelected = true;
 					autonomousOption = 5;
 					clearAndDisplayLCD("5 Right");
-				} else if(nLCDButtons == RIGHT_BUTTON_LCD){
+					} else if(nLCDButtons == RIGHT_BUTTON_LCD){
 					waitForRelease();
 					currentOption++;
 				}
@@ -183,7 +183,7 @@ void pre_auton(){
 					optionSelected = true;
 					autonomousOption = 6;
 					clearAndDisplayLCD("Static Auton");
-				} else if(nLCDButtons == RIGHT_BUTTON_LCD){
+					} else if(nLCDButtons == RIGHT_BUTTON_LCD){
 					waitForRelease();
 					currentOption++;
 				}
@@ -197,16 +197,16 @@ void pre_auton(){
 					optionSelected = true;
 					autonomousOption = 7;
 					clearAndDisplayLCD("Auton Disabled");
-				} else if(nLCDButtons == RIGHT_BUTTON_LCD){
+					} else if(nLCDButtons == RIGHT_BUTTON_LCD){
 					waitForRelease();
 					currentOption = 0;
 				}
 				break;
+			}
 		}
+		} else {
+		displayLCDCenteredString(0, "Auton Disabled");
 	}
-	//} else {
-	//displayLCDCenteredString(0, "Auton Disabled");
-	//}
 
 	// Set bStopTasksBetweenModes to false if you want to keep user created tasks
 	// running between Autonomous and Driver controlled modes. You will need to
@@ -324,7 +324,7 @@ void staticGoalAuton(){
 	//move forward
 	moveForwardAuton(80, 625);
 	boxForward(127);
-	wait1Msec(200);
+	wait1Msec(300);
 	stopAllMotorsAuton();
 	// waiting to stop cone from shaking
 	wait1Msec(500);
@@ -358,12 +358,15 @@ void comeBackWithMogoAndTwoCones(bool left) {
 	openClaw(40);
 	stopAllMotorsAuton();
 
-	// Pick up and stack another cone
+	/*
 	if (!left) {
 		// Adjust the robot for right jerk
 		turnLeftAuton(80);
 		wait1Msec(50);
 	}
+	*/
+
+	// Pick up and stack another cone
 	moveForwardAuton(80, 300);
 	motor[armClaw] = -127;
 	boxForward(127);
@@ -421,7 +424,15 @@ void dropInTwentyZone(bool left) {
 	armUp(80);
 	wait1Msec(100);
 	stopAllMotorsAuton();
-	moveForwardAuton(127, 1250);
+
+	// Keep the claw open!
+	motor[armClaw] = -40;
+
+	//moveForwardAuton(127, 1250);
+	motor[driveLeft] = 100;
+	motor[driveRight] = 100;
+	//wait1Msec(1250);
+
 	mogoDownAuton();
 	moveBackwardAuton(127, 150);
 	mogoUpAuton();
@@ -438,9 +449,9 @@ void dropInTenZone(bool left) {
 		turnLeftAuton(100);
 	}
 	if(left){
-		wait1Msec(1400);
+		wait1Msec(1250);
 	} else {
-		wait1Msec(1150);
+		wait1Msec(1200);
 	}
 	stopAllMotorsAuton();
 
@@ -450,8 +461,11 @@ void dropInTenZone(bool left) {
 	if(left){
 		moveForwardAuton(127, 500);
 	} else {
-		moveForwardAuton(127, 700);
+		moveForwardAuton(127, 750);
 	}
+	// Keep the claw open!
+	motor[armClaw] = -40;
+
 	mogoDownAuton();
 	moveBackwardAuton(127, 200);
 	mogoUpAuton();
@@ -464,7 +478,7 @@ void dropInTenZone(bool left) {
 void dropInFiveZone(bool left) {
 	if (left) {
 		turnRightAuton(80);
-	} else {
+		} else {
 		turnLeftAuton(80);
 	}
 	wait1Msec(1400);
@@ -473,6 +487,8 @@ void dropInFiveZone(bool left) {
 	armUp(80);
 	wait1Msec(100);
 	stopAllMotorsAuton();
+	// Keep the claw open!
+	motor[armClaw] = -40;
 	mogoDownAuton();
 	moveBackwardAuton(127, 150);
 	mogoUpAuton();
@@ -485,52 +501,52 @@ void dropInFiveZone(bool left) {
 void Left_OR_Right_Auton(bool left, short zone){
 	comeBackWithMogoAndTwoCones(left);
 	switch(zone) {
-		case ZONE_20:
-			dropInTwentyZone(left);
-			break;
-		case ZONE_10:
-			dropInTenZone(left);
-			break;
-		case ZONE_5:
-			dropInFiveZone(left);
+	case ZONE_20:
+		dropInTwentyZone(left);
+		break;
+	case ZONE_10:
+		dropInTenZone(left);
+		break;
+	case ZONE_5:
+		dropInFiveZone(left);
 	};
 }
 
 
 task autonomous(){
 	switch(autonomousOption) {
-		case 0:
-			clearAndDisplayLCD("20 Left");
-			Left_OR_Right_Auton(true /* Left is True */, ZONE_20);
-			break;
-		case 1:
-			clearAndDisplayLCD("20 Right");
-			Left_OR_Right_Auton(false /* Left is not True */, ZONE_20);
-			break;
-		case 2:
-			clearAndDisplayLCD("10 Left");
-			Left_OR_Right_Auton(true /* Left is True */, ZONE_10);
-			break;
-		case 3:
-			clearAndDisplayLCD("10 Right");
-			Left_OR_Right_Auton(false /* Left is not True */, ZONE_10);
-			break;
-		case 4:
-			clearAndDisplayLCD("5 Left");
-			Left_OR_Right_Auton(true /* Left is True */, ZONE_5);
-			break;
-		case 5:
-			clearAndDisplayLCD("5 Right");
-			Left_OR_Right_Auton(false /* Left is not True */, ZONE_5);
-			break;
-		case 6:
-			clearAndDisplayLCD("Static Auton");
-			staticGoalAuton();
-			break;
-		case 7:
-			clearAndDisplayLCD("Disabled");
-			// Disable auton, do nothing.
-			break;
+	case 0:
+		clearAndDisplayLCD("20 Left");
+		Left_OR_Right_Auton(true /* Left is True */, ZONE_20);
+		break;
+	case 1:
+		clearAndDisplayLCD("20 Right");
+		Left_OR_Right_Auton(false /* Left is not True */, ZONE_20);
+		break;
+	case 2:
+		clearAndDisplayLCD("10 Left");
+		Left_OR_Right_Auton(true /* Left is True */, ZONE_10);
+		break;
+	case 3:
+		clearAndDisplayLCD("10 Right");
+		Left_OR_Right_Auton(false /* Left is not True */, ZONE_10);
+		break;
+	case 4:
+		clearAndDisplayLCD("5 Left");
+		Left_OR_Right_Auton(true /* Left is True */, ZONE_5);
+		break;
+	case 5:
+		clearAndDisplayLCD("5 Right");
+		Left_OR_Right_Auton(false /* Left is not True */, ZONE_5);
+		break;
+	case 6:
+		clearAndDisplayLCD("Static Auton");
+		staticGoalAuton();
+		break;
+	case 7:
+		clearAndDisplayLCD("Disabled");
+		// Disable auton, do nothing.
+		break;
 	}
 }
 
@@ -566,7 +582,7 @@ int togglePartner = 1;
 int filter(int input){
 	if (input > 20 || input < -20){
 		return input;
-	} else {
+		} else {
 		return 0;
 	}
 }
@@ -576,7 +592,7 @@ task toggleTask(){
 		if(vexRT[Btn7U] == 1){
 			if(togglePartner == 1){
 				togglePartner = 0;
-			} else {
+				} else {
 				togglePartner = 1;
 			}
 			wait1Msec(700);
