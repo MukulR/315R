@@ -633,12 +633,12 @@ task mogoLift() {
 	while(true){
 		//Needs to be double checked to confirm new robot support
 		//assigning lifting the mobile goal to the upper 8-pad button
-		while(vexRT[Btn8UXmtr2] == 1 || vexRT[Btn8U] == 1){
+		while(vexRT[Btn8DXmtr2] == 1 || vexRT[Btn8D] == 1){
 			startMotor(mogo, 80);
 		}
 		stopMotor(mogo);
 		//assigning dropping the mobile goal to the bottom 8-pad button
-		while(vexRT[Btn8DXmtr2] == 1 || vexRT[Btn8D] == 1){
+		while(vexRT[Btn8UXmtr2] == 1 || vexRT[Btn8U] == 1){
 			startMotor(mogo, -80);
 		}
 		stopMotor(mogo);
@@ -692,31 +692,30 @@ task box() {
 	}
 }
 
-task claw() {
-	//Needs to be redone (Brand new intake design) Start from scratch
+task coneIntakeDrop() {
 	while(true){
-		//roller intake
-		if(vexRT[Btn8R] == 1){
-			stopMotor(roller);
-			startMotor(roller, -127);
-			wait1Msec(1500);
-			stopMotor(roller);
-			startMotor(roller, -10);
-		}
-		// roller release
+		// roller intake cone
 		if(vexRT[Btn8L] == 1){
-			stopMotor(roller);
-			startMotor(roller, 127);
-			wait1Msec(1500);
-			stopMotor(roller);
-			startMotor(roller, 10);
+			while (vexRT[Btn8L] == 1) {
+				motor[roller] = 127;
+			}
+			motor[roller] = 10;
 		}
-		//abort the constant power
+		// roller drop cone
+		if (vexRT[Btn8R] == 1) {
+			while(vexRT[Btn8R] == 1) {
+				motor[roller] = -127;
+			}
+			motor[roller] = 0;
+		}
+
+		// abort the constant power
 		if(vexRT[Btn7D] == 1 || vexRT[Btn7DXmtr2] == 1){
 			stopMotor(roller);
 		}
 	}
 }
+
 
 
 /*-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_*/
@@ -728,5 +727,5 @@ task usercontrol() {
 	startTask(mogoLift);
 	startTask(arm);
 	startTask(box);
-	startTask(claw);
+	startTask(coneIntakeDrop);
 }
