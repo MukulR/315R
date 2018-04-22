@@ -709,16 +709,24 @@ task drive(){
 task mogoLift() {
 	while(true){
 		//Needs to be double checked to confirm new robot support
-		//assigning dropping the mobile goal to the upper 8-pad butto
-		while(vexRT[Btn8D] == 1){
-			motor[mogo] = 127;
+		//assigning dropping the mobile goal to the upper 8-pad button
+		if(vexRT[Btn8D] == 1){
+			while(vexRT[Btn8D] == 1){
+				motor[mogo] = 127;
+			}
+			motor[mogo] = 0;
 		}
-		motor[mogo] = 0;
 		//assigning lifting the mobile goal to the bottom 8-pad button
-		while(vexRT[Btn8U] == 1){
-			motor[mogo] = -127;
+		if(vexRT[Btn8U] == 1){
+			while(vexRT[Btn8U] == 1){
+				motor[mogo] = -127;
+			}
+			motor[mogo] = -10;
 		}
-		motor[mogo] = 0;
+		//abort the constant power
+		if(vexRT[Btn7L] == 1){
+			motor[mogo] = 0;
+		}
 	}
 }
 
@@ -737,8 +745,8 @@ task arm() {
 			motor[TR_BL_Arm] = -127;
 			while(vexRT[Btn6U] == 1) {
 			}
-			motor[TL_BR_Arm] = 0;
-			motor[TR_BL_Arm] = 0;
+			motor[TL_BR_Arm] = 15;
+			motor[TR_BL_Arm] = -15;
 		}
 		//assigning dropping the arm to the bottom 6-buttom pad.
 		if(vexRT[Btn6D] == 1){
@@ -757,17 +765,23 @@ task arm() {
 task box() {
 	while(true){
 		//Needs to be double checked to confirm new robot support
-		//box down
-		while(vexRT[Btn5U] == 1){
-			motor[armBox] = -127;
+		//boxBtn8R
+
+		if(vexRT[Btn5U] == 1){
+			while(vexRT[Btn5U] == 1){
+				motor[armBox] = -127;
+			}
+			motor[armBox] = 0;
 		}
-		motor[armBox] = 0;
 
 		//box up
-		while(vexRT[Btn5D] == 1){
-			motor[armBox] = 127;
+		if(vexRT[Btn5D] == 1){
+			while(vexRT[Btn5D] == 1){
+				motor[armBox] = 127;
+			}
+			motor[armBox] = 0;
 		}
-		motor[armBox] = 0;
+
 	}
 }
 
