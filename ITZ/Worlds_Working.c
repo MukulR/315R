@@ -395,15 +395,17 @@ void pickupMogoAndStackCone(){
 	motor[TR_BL_Arm] = -50;
 	wait1Msec(200);
 	motor[mogo] = 127;
+
+	// Start slow and increase the speed inside the loop.
 	while (encoderValue <= 1400) {
-		motor[dr] = 127;
-		motor[dl] = 127;
 		encoderValue = (abs(SensorValue[leftEncoder]) + abs(SensorValue[rightEncoder])) / 2;
 		if(encoderValue >= 900){
 			motor[mogo] = 0;
 			motor[TL_BR_Arm] = 0;
 			motor[TR_BL_Arm] = 0;
 		}
+		motor[dr] = 127;
+		motor[dl] = 127;
 	}
 	// Break before stopping completely
 	motor[dl] = -25;
@@ -428,6 +430,8 @@ void pickupMogoAndStackCone(){
 
 void comeBackWithMogoAndTwoCones() {
 	// Keep the roller rolling so that cone doesn't fall off.
+	motor[roller] = 127;
+	wait1Msec(200);
 	motor[roller] = 10;
 	pickupMogoAndStackCone();
 
@@ -448,7 +452,7 @@ void comeBackWithMogoAndTwoCones() {
 	motor[TR_BL_Arm] = -50;
 	motor[roller] = 127;
 	motor[armBox] = -127;
-	wait1Msec(500);
+	wait1Msec(1000);
 	motor[armBox] = 0;
 	motor[TL_BR_Arm] = 0;
 	motor[TR_BL_Arm] = 0;
@@ -457,7 +461,7 @@ void comeBackWithMogoAndTwoCones() {
 	armDown(50, 1000);
 
 	//raise arm and bringing box back
-	armUp(80, 200);
+	armUp(127, 300);
 	motor[armBox] = 127;
 	wait1Msec(1000);
 	motor[armBox] = 0;
