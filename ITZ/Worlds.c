@@ -396,7 +396,6 @@ void pickupMogoAndStackCone(){
 	wait1Msec(200);
 	motor[mogo] = 127;
 
-	// Start slow and increase the speed inside the loop.
 	while (encoderValue <= 1400) {
 		encoderValue = (abs(SensorValue[leftEncoder]) + abs(SensorValue[rightEncoder])) / 2;
 		if(encoderValue >= 900){
@@ -463,7 +462,7 @@ void comeBackWithMogoAndTwoCones() {
 	//raise arm and bringing box back
 	armUp(127, 300);
 	motor[armBox] = 127;
-	wait1Msec(1000);
+	wait1Msec(500);
 	motor[armBox] = 0;
 
 	// bring the arm down and stack cone
@@ -494,35 +493,37 @@ void dropInTwentyZone(bool left) {
 		turnRightTicks(80, 230);
 	}
 
-	//stop at the drop zone
+	// Stop at the drop zone. Bring the mogo down while moving forward so that
+	// we don't waste time.
 	SensorValue[leftEncoder] = 0;
 	SensorValue[rightEncoder] = 0;
 	int encoderValue = 0;
+	motor[mogo] = 127;
 	while(encoderValue <= 600){
 		motor[dr] = 127;
 		motor[dl] = 127;
+
 		encoderValue = (abs(SensorValue[leftEncoder]) + abs(SensorValue[rightEncoder])) / 2;
 	}
-	motor[dr] = 0;
-	motor[dl] = 0;
-
-	motor[mogo] = 127;
 	// Keep constant power to drive so that we can stay close to 20 point zone while dropping the mogo
 	motor[dr] = 50;
 	motor[dl] = 50;
-	wait1Msec(600);
+
+	wait1Msec(550);
 	motor[dr] = 0;
 	motor[dl] = 0;
-
-	//drop mogo
 	motor[mogo] = 0;
-	motor[mogo] = -127;
-	wait1Msec(500);
+
+	// Come back a bit and bring the mogo up
+	motor[mogo] = -80;
+	moveBackwardAuton(50, 120);
+	motor[mogo] = -80;
+	wait1Msec(1000);
 	motor[mogo] = 0;
 
 	// Bring the arm down to avoid robot from tipping
 	armDown(127, 200);
-	moveBackwardAuton(80, 360);
+	moveBackwardAuton(80, 180);
 	stopAllMotorsAuton();
 }
 
@@ -768,24 +769,17 @@ task arm() {
 
 task box() {
 	while(true){
-		//Needs to be double checked to confirm new robot support
-		//boxBtn8R
-
-		if(vexRT[Btn5U] == 1){
-			while(vexRT[Btn5U] == 1){
-				motor[armBox] = -127;
-			}
-			motor[armBox] = 0;
+		//box down
+		while(vexRT[Btn5U] == 1){
+			motor[armBox] = -127;
 		}
+		motor[armBox] = 0;
 
 		//box up
-		if(vexRT[Btn5D] == 1){
-			while(vexRT[Btn5D] == 1){
-				motor[armBox] = 127;
-			}
-			motor[armBox] = 0;
+		while(vexRT[Btn5D] == 1){
+			motor[armBox] = 127;
 		}
-
+		motor[armBox] = 0;
 	}
 }
 
