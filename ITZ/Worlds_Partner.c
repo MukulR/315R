@@ -348,7 +348,7 @@ void turnLeftTicks(int power, int ticks){
 
 void staticGoalAuton(bool left){
 	motor[roller] = 10;
-	armUp(80, 200);
+	armUp(80, 300);
 	SensorValue[leftEncoder] = 0;
 	SensorValue[rightEncoder] = 0;
 	int encoderValue = 0;
@@ -361,7 +361,7 @@ void staticGoalAuton(bool left){
 	motor[dr] = 0;
 
 	motor[armBox] = -127;
-	wait1Msec(1000);
+	wait1Msec(1300);
 	motor[armBox] = 0;
 	motor[roller] = 0;
 
@@ -376,8 +376,9 @@ void staticGoalAuton(bool left){
 	motor[armBox] = 127;
 	wait1Msec(400);
 	stopAllMotorsAuton();
-	armDown(127, 300);
+	//armDown(127, 300);
 	moveBackwardAuton(80, 90);
+
 	if(left){
 		turnLeftTicks(80, 200);
 	} else{
@@ -416,6 +417,7 @@ void pickupMogoAndStackCone(){
 
 	// Pickup mobile goal
 	// Drop the yellow cone on mobile goal
+	armUp(80, 100);
 	motor[mogo] = -127;
 	wait1Msec(1250);
 	motor[mogo] = 0;
@@ -449,18 +451,20 @@ void comeBackWithMogoAndTwoCones() {
 	motor[dl] = 0;
 	motor[TL_BR_Arm] = 50;
 	motor[TR_BL_Arm] = -50;
-	motor[roller] = 127;
-	motor[armBox] = -127;
-	wait1Msec(1000);
-	motor[armBox] = 0;
+	wait1Msec(500);
 	motor[TL_BR_Arm] = 0;
 	motor[TR_BL_Arm] = 0;
 
-	//bring arm down and grab cone
-	armDown(50, 1000);
+	// bring arm down, start roller and bring box down to grab cone
+	motor[roller] = 127;
+	motor[armBox] = -127;
+	wait1Msec(1000);
+	motor[armBox] = -15;
+	armDown(50, 800);
 
 	//raise arm and bringing box back
 	armUp(127, 300);
+	motor[roller] = 10;
 	motor[armBox] = 127;
 	wait1Msec(500);
 	motor[armBox] = 0;
@@ -474,6 +478,7 @@ void comeBackWithMogoAndTwoCones() {
 
 	//come back straight
 	moveBackwardAuton(127, 1375);
+	stopAllMotorsAuton();
 }
 
 void dropInTwentyZone(bool left) {
@@ -495,6 +500,7 @@ void dropInTwentyZone(bool left) {
 
 	// Stop at the drop zone. Bring the mogo down while moving forward so that
 	// we don't waste time.
+	armUp(127, 150);
 	SensorValue[leftEncoder] = 0;
 	SensorValue[rightEncoder] = 0;
 	int encoderValue = 0;
@@ -589,7 +595,7 @@ void dropInFiveZone(bool left) {
 	moveBackwardAuton(127, 180);
 	// Prepare to drop.
 	// Bring the arm up
-	armUp(25, 50);
+	armUp(80, 100);
 	//drop mogo
 	motor[mogo] = 127;
 	// Keep constant power to drive so that we can stay close to 20 point zone while dropping the mogo
@@ -598,7 +604,9 @@ void dropInFiveZone(bool left) {
 	motor[mogo] = 0;
 
 	// Bring the arm down to avoid robot from tipping
-	moveBackwardAuton(80, 360);
+	moveBackwardAuton(60, 220);
+	motor[mogo] = -127;
+	wait1Msec(1250);
 	stopAllMotorsAuton();
 }
 
@@ -680,7 +688,6 @@ task autonomous(){
 /*                                                                           */
 /*---------------------------------------------------------------------------*/
 
-
 /*------------------Dead zone filter------------------------*/
 int filter(int input){
 	if (input > 20 || input < -20){
@@ -689,10 +696,6 @@ int filter(int input){
 		return 0;
 	}
 }
-
-//----------------------------------------------
-
-int togglePartner = 1;
 
 task toggleTask(){
 	while(true){
@@ -710,21 +713,14 @@ task toggleTask(){
 /*-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_*/
 
 /*------------------------Drive-----------------------------*/
+
 void driveRobot(int forward, int turn) {
 	//Needs to be double checked to confirm new robot support
 	motor[dr] = -(forward - turn);
 	motor[dl] = (forward + turn);
 }
 
-task drive(){
-	while (true){
-		//forward backward
-		int forward = togglePartner * filter(vexRT[Ch1Xmtr2]) + (1 - togglePartner) * filter(vexRT[Ch1]);
-		//turning
-		int turn = togglePartner * filter(vexRT[Ch3Xmtr2]) + (1 - togglePartner) * filter(vexRT[Ch3]);
-		driveRobot(forward, turn);
-	}
-}
+
 /*-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_*/
 
 /*------------------Mobile Goal-----------------------------*/
@@ -830,7 +826,6 @@ task coneIntakeDrop() {
 
 //This task drives everything.Don't mess with this unless debugging. Double check all function support with new robot.
 task usercontrol() {
-	startTask(toggleTask);
 	startTask(drive);
 	startTask(mogoLift);
 	startTask(arm);
