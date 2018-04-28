@@ -442,7 +442,7 @@ void comeBackWithMogoAndTwoCones() {
 	SensorValue[leftEncoder] = 0;
 	SensorValue[rightEncoder] = 0;
 	int encoderValue = 0;
-	while(encoderValue <= 75){
+	while(encoderValue <= 100){
 		motor[dr] = 80;
 		motor[dl] = 80;
 		encoderValue = (abs(SensorValue[leftEncoder]) + abs(SensorValue[rightEncoder])) / 2;
