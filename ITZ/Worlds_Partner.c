@@ -442,15 +442,15 @@ void comeBackWithMogoAndTwoCones() {
 	SensorValue[leftEncoder] = 0;
 	SensorValue[rightEncoder] = 0;
 	int encoderValue = 0;
-	while(encoderValue <= 75){
+	while(encoderValue <= 100){
 		motor[dr] = 80;
 		motor[dl] = 80;
 		encoderValue = (abs(SensorValue[leftEncoder]) + abs(SensorValue[rightEncoder])) / 2;
 	}
 	motor[dr] = 0;
 	motor[dl] = 0;
-	motor[TL_BR_Arm] = 50;
-	motor[TR_BL_Arm] = -50;
+	motor[TL_BR_Arm] = 80;
+	motor[TR_BL_Arm] = -80;
 	wait1Msec(500);
 	motor[TL_BR_Arm] = 0;
 	motor[TR_BL_Arm] = 0;
@@ -477,19 +477,19 @@ void comeBackWithMogoAndTwoCones() {
 	motor[roller] = 0;
 
 	//come back straight
-	moveBackwardAuton(127, 1375);
+	moveBackwardAuton(127, 1200);
 	stopAllMotorsAuton();
 }
 
 void dropInTwentyZone(bool left) {
 	if(left){
 		//turn left so that we are facing fence
-		turnLeftTicks(80, 120);
+		turnLeftTicks(80, 150);
 	} else{
-		turnRightTicks(80, 120);
+		turnRightTicks(80, 150);
 	}
 	// Move back so that robot is parallel to 10 point pipe
-	moveBackwardAuton(127, 625);
+	moveBackwardAuton(127, 650);
 
 	if(left){
 		// Turn left so that robot is facing the drop zone
@@ -504,8 +504,9 @@ void dropInTwentyZone(bool left) {
 	SensorValue[leftEncoder] = 0;
 	SensorValue[rightEncoder] = 0;
 	int encoderValue = 0;
-	motor[mogo] = 127;
-	while(encoderValue <= 600){
+	//motor[mogo] = 127;
+	clearTimer(T1);
+	while(encoderValue <= 600 && time1[T1] <= 1000){
 		motor[dr] = 127;
 		motor[dl] = 127;
 
@@ -514,8 +515,9 @@ void dropInTwentyZone(bool left) {
 	// Keep constant power to drive so that we can stay close to 20 point zone while dropping the mogo
 	motor[dr] = 50;
 	motor[dl] = 50;
-
-	wait1Msec(550);
+	motor[mogo] = 127;
+	//wait1Msec(550);
+	wait1Msec(1350);
 	motor[dr] = 0;
 	motor[dl] = 0;
 	motor[mogo] = 0;
@@ -524,7 +526,7 @@ void dropInTwentyZone(bool left) {
 	motor[mogo] = -80;
 	moveBackwardAuton(50, 120);
 	motor[mogo] = -80;
-	wait1Msec(1000);
+	wait1Msec(800);
 	motor[mogo] = 0;
 
 	// Bring the arm down to avoid robot from tipping
@@ -536,37 +538,19 @@ void dropInTwentyZone(bool left) {
 void dropInTenZone(bool left) {
 	if(left){
 		// Turn right so that robot is facing the drop zone
-		turnRightTicks(80, 675);
+		turnRightTicks(80, 625);
 	} else{
-		turnLeftTicks(80, 675);
+		turnLeftTicks(80, 625);
 	}
 	// Prepare to drop.
 	// Bring the arm up
-	armUp(25, 50);
+	armUp(50, 200);
 	//move forward while bringing mogo up
-	/*
-	motor[dl] = 127;
-	motor[dr] = 127;
-	motor[mogo] = 127;
-	*/
 
-	//stop at the drop zone
-/*
-	SensorValue[leftEncoder] = 0;
-	SensorValue[rightEncoder] = 0;
-	int encoderValue = 0;
-	while(encoderValue <= 180){
-		motor[dr] = 127;
-		motor[dl] = 127;
-		encoderValue = (abs(SensorValue[leftEncoder]) + abs(SensorValue[rightEncoder])) / 2;
-	}
-	motor[dr] = 0;
-	motor[dl] = 0;
-*/
 	motor[mogo] = 127;
 	// Keep constant power to drive so that we can stay close to 20 point zone while dropping the mogo
-	motor[dr] = 50;
-	motor[dl] = 50;
+	motor[dr] = 80;
+	motor[dl] = 80;
 	wait1Msec(1250);
 
 	//drop mogo
@@ -606,7 +590,7 @@ void dropInFiveZone(bool left) {
 	// Bring the arm down to avoid robot from tipping
 	moveBackwardAuton(60, 220);
 	motor[mogo] = -127;
-	wait1Msec(1250);
+	wait1Msec(1000);
 	stopAllMotorsAuton();
 }
 
@@ -688,6 +672,9 @@ task autonomous(){
 /*                                                                           */
 /*---------------------------------------------------------------------------*/
 
+// Toggle partner variable DO NOT CHANGE
+int togglePartner = 1;
+
 /*------------------Dead zone filter------------------------*/
 int filter(int input){
 	if (input > 20 || input < -20){
@@ -720,6 +707,15 @@ void driveRobot(int forward, int turn) {
 	motor[dl] = (forward + turn);
 }
 
+task drive(){
+	while (true){
+		//forward backward
+		int forward = togglePartner * filter(vexRT[Ch1Xmtr2]) + (1 - togglePartner) * filter(vexRT[Ch1]);
+		//turning
+		int turn = togglePartner * filter(vexRT[Ch3Xmtr2]) + (1 - togglePartner) * filter(vexRT[Ch3]);
+		driveRobot(forward, turn);
+	}
+}
 
 /*-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_*/
 
@@ -798,9 +794,9 @@ task box() {
 
 task coneIntakeDrop() {
 	while(true){
-		// roller intake cone
-		if(vexRT[Btn8L] == 1){
-			while (vexRT[Btn8L] == 1) {
+		// roller intake cone.  This can be operated by the main driver or by the partner.
+		if(vexRT[Btn8L] == 1 || vexRT[Btn6UXmtr2] == 1){
+			while (vexRT[Btn8L] == 1 || vexRT[Btn6UXmtr2] == 1) {
 				motor[roller] = 127;
 			}
 			motor[roller] = 10;
@@ -826,6 +822,7 @@ task coneIntakeDrop() {
 
 //This task drives everything.Don't mess with this unless debugging. Double check all function support with new robot.
 task usercontrol() {
+	startTask(toggleTask);
 	startTask(drive);
 	startTask(mogoLift);
 	startTask(arm);

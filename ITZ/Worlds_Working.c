@@ -477,19 +477,19 @@ void comeBackWithMogoAndTwoCones() {
 	motor[roller] = 0;
 
 	//come back straight
-	moveBackwardAuton(127, 1375);
+	moveBackwardAuton(127, 1200);
 	stopAllMotorsAuton();
 }
 
 void dropInTwentyZone(bool left) {
 	if(left){
 		//turn left so that we are facing fence
-		turnLeftTicks(80, 120);
+		turnLeftTicks(80, 160);
 	} else{
-		turnRightTicks(80, 120);
+		turnRightTicks(80, 160);
 	}
 	// Move back so that robot is parallel to 10 point pipe
-	moveBackwardAuton(127, 625);
+	moveBackwardAuton(127, 650);
 
 	if(left){
 		// Turn left so that robot is facing the drop zone
@@ -505,7 +505,7 @@ void dropInTwentyZone(bool left) {
 	SensorValue[rightEncoder] = 0;
 	int encoderValue = 0;
 	motor[mogo] = 127;
-	while(encoderValue <= 600){
+	while(encoderValue <= 360){
 		motor[dr] = 127;
 		motor[dl] = 127;
 
@@ -536,37 +536,18 @@ void dropInTwentyZone(bool left) {
 void dropInTenZone(bool left) {
 	if(left){
 		// Turn right so that robot is facing the drop zone
-		turnRightTicks(80, 675);
+		turnRightTicks(80, 600);
 	} else{
-		turnLeftTicks(80, 675);
+		turnLeftTicks(80, 600);
 	}
 	// Prepare to drop.
 	// Bring the arm up
 	armUp(25, 50);
 	//move forward while bringing mogo up
-	/*
-	motor[dl] = 127;
-	motor[dr] = 127;
-	motor[mogo] = 127;
-	*/
-
-	//stop at the drop zone
-/*
-	SensorValue[leftEncoder] = 0;
-	SensorValue[rightEncoder] = 0;
-	int encoderValue = 0;
-	while(encoderValue <= 180){
-		motor[dr] = 127;
-		motor[dl] = 127;
-		encoderValue = (abs(SensorValue[leftEncoder]) + abs(SensorValue[rightEncoder])) / 2;
-	}
-	motor[dr] = 0;
-	motor[dl] = 0;
-*/
 	motor[mogo] = 127;
 	// Keep constant power to drive so that we can stay close to 20 point zone while dropping the mogo
-	motor[dr] = 50;
-	motor[dl] = 50;
+	motor[dr] = 80;
+	motor[dl] = 80;
 	wait1Msec(1250);
 
 	//drop mogo
